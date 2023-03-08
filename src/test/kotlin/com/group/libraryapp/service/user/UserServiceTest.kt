@@ -17,12 +17,12 @@ class UserServiceTest @Autowired constructor(
 ) {
 
     @AfterEach
-    fun delete(){
+    fun delete() {
         userRepository.deleteAll()
     }
 
     @Test
-    fun userSaveTest(){
+    fun userSaveTest() {
         //given
         val request = UserCreateRequest("김단우", null)
 
@@ -37,7 +37,7 @@ class UserServiceTest @Autowired constructor(
     }
 
     @Test
-    fun getUsersTest(){
+    fun getUsersTest() {
         //given
         userRepository.saveAll(
             listOf(
@@ -51,27 +51,29 @@ class UserServiceTest @Autowired constructor(
 
         //then
         assertThat(users).hasSize(2)
-        assertThat(users).extracting("name").containsExactlyInAnyOrder("A","B")
+        assertThat(users).extracting("name").containsExactlyInAnyOrder("A", "B")
         assertThat(users).extracting("age").containsExactlyInAnyOrder(20, null)
 
     }
 
     @Test
-    fun updateUserNameTest(){
+    fun updateUserNameTest() {
         //given
         val savedUser = userRepository.save(User("kdw", 33))
-        val userUpdateRequest = UserUpdateRequest(savedUser.id, "kdanwoo")
+//        val userUpdateRequest = savedUser.id?.let { UserUpdateRequest(it, "kdanwoo") }
+        val userUpdateRequest = UserUpdateRequest(savedUser.id!!, "kdanwoo")
 
         //when
         userService.updateUserName(userUpdateRequest)
 
         //then
-        val updatedUser = userRepository.findById(savedUser.id)
+        val updatedUser = userRepository.findById(savedUser.id!!)
         assertThat(updatedUser.get().name).isEqualTo("kdanwoo")
+
     }
 
     @Test
-    fun deleteUser(){
+    fun deleteUser() {
         val savedUser = userRepository.save(User("kdw", 33))
 
         userService.deleteUser("kdw")
