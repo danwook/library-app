@@ -28,7 +28,7 @@ class BookService(
     @Transactional
     fun loanBook(request: BookLoanRequest) {
         val savedBook = bookRepository.findByName(request.bookName) ?: fail()
-        if (userLoanHistoryRepository.findByBookNameAndIsReturn(request.bookName, UserLoanStatus.LOANED) != null) {
+        if (userLoanHistoryRepository.findByBookNameAndStatus(request.bookName, UserLoanStatus.LOANED) != null) {
             throw IllegalArgumentException("대출되어 있음")
         }
 
