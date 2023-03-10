@@ -31,7 +31,7 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun save(){
         //given
-        val bookRequest = BookRequest("book")
+        val bookRequest = BookRequest("book", "COMPUTER")
 
         //when
         bookService.saveBook(bookRequest)
@@ -39,13 +39,14 @@ class BookServiceTest @Autowired constructor(
         //then
         assertThat(bookRepository.findAll()).hasSize(1)
         assertThat(bookRepository.findAll()[0].name).isEqualTo("book")
+        assertThat(bookRepository.findAll()[0].type).isEqualTo("과학")
     }
 
     @Test
     @DisplayName("정상적으로 대여")
     fun loan(){
         //given
-        val savedBook = bookRepository.save(Book("book"))
+        val savedBook = bookRepository.save(Book.fixture("book"))
         val savedUser = userRepository.save(User("kdw", 33))
         val bookLoanRequest = BookLoanRequest(savedUser.name, savedBook.name)
 

@@ -21,7 +21,7 @@ class BookService(
 
     @Transactional
     fun saveBook(request: BookRequest) {
-        bookRepository.save(Book(request.name))
+        bookRepository.save(Book(request.name, request.type))
     }
 
     @Transactional
@@ -36,7 +36,7 @@ class BookService(
     }
 
     @Transactional
-    fun returnBook(request: BookReturnRequest){
+    fun returnBook(request: BookReturnRequest) {
         val savedUser = userRepository.findByName(request.userName) ?: fail()
         savedUser.returnBook(request.bookName)
     }
