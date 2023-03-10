@@ -1,11 +1,7 @@
 package com.group.libraryapp.domain.user.loanhistory
 
 import com.group.libraryapp.domain.user.User
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Entity
 class UserLoanHistory(
@@ -14,7 +10,9 @@ class UserLoanHistory(
     val user: User,
 
     val bookName: String,
-    var isReturn: Boolean,
+
+    @Enumerated(EnumType.STRING)
+    var isReturn: UserLoanStatus,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +20,7 @@ class UserLoanHistory(
 ) {
 
     fun doReturn(){
-        this.isReturn = true
+        this.isReturn = UserLoanStatus.RETURNED
     }
 
 }
