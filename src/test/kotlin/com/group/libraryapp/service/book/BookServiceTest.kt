@@ -2,6 +2,7 @@ package com.group.libraryapp.service.book
 
 import com.group.libraryapp.domain.book.Book
 import com.group.libraryapp.domain.book.BookRepository
+import com.group.libraryapp.domain.book.BookType
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
@@ -24,14 +25,14 @@ class BookServiceTest @Autowired constructor(
 
     @AfterEach
     fun delete(){
-        bookRepository.deleteAll();
-        userRepository.deleteAll();
+        bookRepository.deleteAll()
+        userRepository.deleteAll()
         userLoanHistoryRepository.deleteAll()
     }
     @Test
     fun save(){
         //given
-        val bookRequest = BookRequest("book", "COMPUTER")
+        val bookRequest = BookRequest("book", BookType.COMPUTER)
 
         //when
         bookService.saveBook(bookRequest)
@@ -39,7 +40,7 @@ class BookServiceTest @Autowired constructor(
         //then
         assertThat(bookRepository.findAll()).hasSize(1)
         assertThat(bookRepository.findAll()[0].name).isEqualTo("book")
-        assertThat(bookRepository.findAll()[0].type).isEqualTo("과학")
+        assertThat(bookRepository.findAll()[0].type).isEqualTo(BookType.COMPUTER)
     }
 
     @Test
