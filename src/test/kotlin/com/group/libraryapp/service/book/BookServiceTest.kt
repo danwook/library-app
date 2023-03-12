@@ -5,7 +5,9 @@ import com.group.libraryapp.domain.book.BookRepository
 import com.group.libraryapp.domain.book.BookType
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
@@ -73,6 +75,44 @@ class BookServiceTest @Autowired constructor(
 
 
         //then
+
+    }
+
+    @Test
+    @DisplayName("책 대여 권수를 정상 확인한다")
+    fun countLoanBookTest(){
+        //given
+        val savedUser = userRepository.save(User("kdw", 33))
+        userLoanHistoryRepository.saveAll(listOf(
+            UserLoanHistory.fixture(savedUser, "A"),
+            UserLoanHistory.fixture(savedUser, "B", UserLoanStatus.RETURNED),
+            UserLoanHistory.fixture(savedUser, "C", UserLoanStatus.RETURNED)
+        ))
+
+        //when
+        val result = bookService.countLoanedBook();
+
+        //then
+        assertThat(result).isEqualTo(1)
+    }
+
+    @Test
+    @DisplayName("분야별 책 권수를 정상 확인한다")
+    fun getBookStaticsTest(){
+
+        //given
+        bookRepository.saveAll(listOf(
+            Book.fixture("A"),
+            Book.fixture("D"),
+            Book.fixture("B", BookType.ECONOMY),
+            Book.fixture("C", BookType.SCIENCE)
+        ))
+
+        //when
+        val result = bookService.getBookStatics()
+
+        //then
+        assertThat(result[0].count).isEqualTo(2)
 
     }
 
