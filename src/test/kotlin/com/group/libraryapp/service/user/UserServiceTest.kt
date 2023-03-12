@@ -79,8 +79,7 @@ class UserServiceTest @Autowired constructor(
 
     @Test
     fun deleteUser() {
-        val savedUser = userRepository.save(User("kdw", 33))
-
+        userRepository.save(User("kdw", 33))
         userService.deleteUser("kdw")
 
         assertThat(userRepository.findAll()).hasSize(0)
